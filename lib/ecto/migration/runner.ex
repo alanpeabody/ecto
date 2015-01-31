@@ -116,6 +116,7 @@ defmodule Ecto.Migration.Runner do
   end
 
   defp execute_in_direction(repo, :backward, level, command) do
+    Logger.log(:info, command)
     reversed = reverse(command)
 
     if reversed do
@@ -127,9 +128,10 @@ defmodule Ecto.Migration.Runner do
   end
 
   defp reverse([]),   do: []
-  defp reverse([h|t]) do
+  defp reverse([h|t] = commands) do
+    Logger.log(:info, commands)
     if reversed = reverse(h) do
-      [reversed|reverse(t)]
+      reverse(t) ++ [reversed]
     end
   end
 
